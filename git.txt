@@ -1,0 +1,61 @@
+to create a file touch file name 
+to create a .ignore file
+cat >.gitignore
+file_name
+file_name
+file_name
+git init 
+to intialize a repository to 
+git status 
+to check the status of the files 
+git add file_name 
+git add file_name file_name 
+git add .
+red--> untracked files 
+green--> repository
+from stgging area to local repository
+git commit -m "desc"
+git log
+git config--global--user.name"desc"
+git config--global--user.mail"desc"
+git config--global--list
+
+BRANCH
+to list the local banches
+git branch 
+`````````````````
+to list the local and remote branches 
+git branch -a
+`````````````````````
+to create a branch 
+git branch brnach_name
+`````````````````````
+to move into that branch
+git checkout branch_name
+``````````````````````````
+to create and move into that branch 
+git ckeckout -b branch_name
+````````````````````````````` 
+to merge a branch with the master branch 
+go to master branch and 
+git merge branch_name 
+```````````````````````
+u can't delete the branch that u are currently in 
+go to the master branch and do merging
+```````````````````````````````````` 
+to del a branch tha is merged 
+git branch -d branch_name
+````````````````````````````
+to delete a branch that is not merged 
+git branch -D branch_name 
+```````````````````````````````
+when u are creating a new branch whtever the data present in the master branch will copyinto the newly creted branch 
+irrespective where the fike actually created git always consider from which branch the file is commited 
+and that file is commiteed to that branch 
+```````````````````````````````````````
+
+mkdir used to create a folder
+
+
+
+

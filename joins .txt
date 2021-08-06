@@ -1,0 +1,379 @@
+									T-JOINS
+we have 2 types of joins 
+1.inner join 
+2.outer jon
+
+1.INNER JOIN
+===========
+-->inner join will always return the matched rows from both main and lookup 
+-->non matched rows will rejected
+
+2.LEFT OUTER JOIN
+================
+-->in this will get full  the data present in the main and matched and multiple matched rows from lookup
+--> and non matched rows in the main are comes with null values as a lookup values in the 
+
+3.RIGHT OUTER JOIN
+==================
+--> Basically we dont have any right outer join in talend but we will do it by 
+-->interchganging the main to lookup and lookup to main and perform the left outer join  then will get the right outer join 
+
+4.FULL OUTER JOIN 
+===============
+-->full outer join. also we dont have any function to perform full outer join we will do it by 
+-->performing following process
+-->take main and lookup two times in a single job 
+--> perform left outer join with the first pair and right outer join with the second pair
+---> and combine them using tunite and add one more component called tunique row ("for removing the duplicates")then will get the full outer join
+ 
+NOTE: we will use two tmap components in this job one for left outer join and one for right outer join 
+ 
+4.CROSS JOIN
+============
+-->cross join.also we dont have any function in join model
+
+
+
+  
+
+
+  
+
+MATCH MODEL
+===========
+we have 3 more options in 
+
+1.ALL MATCHES
+============
+this means it will return the all matched rows
+
+2.FIRST MATCH 
+=============
+it returns the first match of the record , if we have multiple records matched with single record 
+
+3.UNIQUE MATCH 
+============= 
+it returns the last  match of the record , if we have multiple records matched with single record
+
+
+
+
+
+
+
+
+
+
+								LOOKUP MODEL
+							============================
+
+
+We have 3 diff types of options in this 
+
+1.Load at once
+`````````````` 
+in this all the lookup files  load at once first all the lookup files are loaded and after completion of all lookup files the main triggers and iterations occurs 
+   
+2.Load at each row 
+`````````````` 
+in this lookup files iterartes for each and every iteration of main file in this it stores the data in RAM 
+first iteration from main file iterates and lookup files iterates 
+second file iterates from main and lookup files will again iterates for second file vice versa
+
+3.Load at each row (catche)
+````````````````````````````
+it is simillar to load at each row but in this case the lookup files stores in catche memory 
+it is faster than the load at each row 
+
+-----------------------------------
+in this we always face one error that is
+
+ERROR:HEAP MEMORY OR OUT OF MEMORY
+
+In order to get ride of this error we followed below process
+
+1.BY increasing the ram size which we can find in run tab component from advanced settings 
+the component called USE SPECIFIC ARGUMENTS option 
+change the ram sizw based on the requirement 
+
+if we have files size larger than the ram size in this case we go with following option called
+
+2.TEMP DATA DIRECTORY PATH
+
+we cant store the data in RAM if the size of the files are larger than ram size we create a temp data folder in Hard disk 
+will get this option in t-map componenet tab give any path directory in the temp data directory path
+
+
+
+Topic: Catching the rejected rows in the output and rejected rows in inner join 
+---
+In the tmap 
+when we create output or perform any joints operations using t-map based on the conditions some of the data is rejeted so in order to get the rejected data we follow below process
+when we create the output we get option called tmap settings in that following three options are available 
+--
+1.Catch output reject
+by defaults it comes with false option make it true in order to get the data of rejected rows of output
+--
+2.Catch lookup inner join reject 
+make it true for getting the rejected data 
+
+
+
+
+    							T-JOIN COMPONENT
+
+
+-->Most of the people know that t-join can only perform inner join but it can also perform left outer join  
+-->by uncheck the inner join (with reject output) 
+
+
+-->it is also used to join two tables 
+-->search for t join component in the design workspace and configure as below
+-->take main file and lookup file and connect them to the t-join component
+-->inside the t-join component we have folowing options
+
+-->1.go to the edit schema and copy main columns and lookup columns 
+-->2.we have an option called include lookup columns in output
+     match the lookup columns with the columns in the mail file 
+-->3.give the key attribute column in the give key attribute option and run the job
+--> we get the output as left outer join with unique match as like we get in the tmap joins
+================================================
+-->in order to get the left outer join with first match we dont have any option directley 
+-->we have to introduce some components 
+-->from the lookup file we are getting all the records (including duplictes ) use tunique row in order to remove those records by removing the duplictes we get the first record 
+-->ultimately our job is to get the first match and we got it so use tunique row component b/w lookup file and tjoin component
+
+
+II)METHOD
+========
+-->we can also get the first match by using sequence nor and tsortrow components the process is as follows
+-->create a seq nor inside the t-map and apply tsort row operation on seq nor by selecting seq nor column aplly desc order 
+--> so we get the last record as first record ultimatley we get our output 
+
+
+RIGHT OUTER JOIN
+================
+as we done right outer join in the t-map. the same thing will apply here 
+by interchanging the main to lookup and lookup to main 
+
+
+INNER JOIN
+==========
+-->By checking the right mark on the inner join (with output reject)
+--> we get the inner join with unique match and rejected rows in the output as a seperate output 
+
+
+
+TROWGENERATOR
+=============
+-->it is used to generate no.of  rows 
+-->why we need this 
+-->in case of testing the job with bulk records if the customer gives u the file no need to create a file 
+--> but if he doesn,t provide any file we have to create a file using dummy records 
+-->for this we have a component called  TROWGENERATOR 
+-->process
+-->serach for trowgenerator component in the design workspace 
+--> configure th component 
+-->click on the + button to add columns give the data type also 
+--> based on the data type give suitable functions in the functions option and incase u dont what function to give press ctrl-space button will get the list what functions 
+    we can give 
+-->give the no.of rows for ur file 
+-->suppose if u give "sequence function" for "emd_id column"
+-->in the bottom we have an option called FUNCTION PARAMETERS 
+-->give the parameters for the function u have used 
+--> click on preview for viweing the data 
+--> we can also give the no of rows for preview  
+--> then connect to the output file 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DIFFERENCE B/W T-MAP AND T-JOIN
+================================
+1.we can add multiple lookup files to t-map 			1.we can add only one lookup file for t-join
+2.we can do filters conditions and we can add columns 
+  remove columns                                                2.we can not perform any operations apart from join
+3.
+
+
+
+
+
+
+
+								Taggrigate row
+
+T-aggrigate row component is used to perform following operations
+1.list
+2.total
+3.max value 
+4.min value
+5.avg vaue
+When u open the T-aggrigrate row component u will see the followng options
+-->Edit_schema
+-->click on edit schema u will see input columns are synced automatically because u r connected tggrigrate component with the delimated file 
+--> here u need to add output columns whatever u want in the output and give the data type for the columns 
+-->-->next u will have another option called OPERATIONS 
+-->here u need to create ouput columns and data type and functions to be implement on columns
+-->click on + button to create output columns  
+-->the list of functions available are 
+-->list
+-->max
+-->min
+-->sum
+-->avg
+-->count
+-->count(obj)
+-->first
+-->last
+-->count(distinct)
+-->choose the function based on ur req of the column and give corresponding input column 
+-->we have another option in taggrigrate component
+-->-->GROUP BY 
+-->here we need to specify the output column that u need to group by 
+-->suppose if u want to group by dept _no column 
+-->create a output column in the edit schema give the data type 
+-->here u need to add this colun in GROUP BY view 
+-->click on + button and add it... make sure ur output column is mapped with the input column 
+======================
+T-system
+-->tsystem component is used to excute operating system commands through talend eiheir it may be windows command or unix command or linux command 
+-->when u open the component 
+-->u see like use single command "use it if u want to excute a single command "
+-->Array command "use it if u want to excute multiple commands"
+-->it runs only local server i.e in your local machine itself
+==========================
+T-ssh
+-->T-ssh component is used to excute commands only but it also exute commands in remote server also by logging 
+--> into remote server by providing credentials in the T-ssh component 
+==========================
+T-loop
+-->T-loop component 
+-->if u want to excute job multiple times u need to go to run tab and run manually 
+--> by using the T-loop component we can run the job n no.of times 
+-->whn u open the component we have 2 loop types 
+-->1.for_loop
+-->2.while-loop------------select any one based on your requirement 
+-->give the values in the options provided in the component 
+============================
+T-ifinite-loop
+--> it as same like t-loop 
+-->when u want to run the job infinite times we use this component 
+==========================
+T-restclient
+-->it used to get the data from rest api's
+-->by opening the component 
+-->give the values in -->URL
+		      -->Relative path
+                      -->HTTP method 
+		      -->accept method 
+		      -->wrote querry based on the requirement 
+-->check the authentication box 
+--> provide the credentials 
+==================================
+T-sleep
+-->suppose if u have two subjobs in a job
+-->u gave on subjob ok to the child job from parent job 
+--> when the parent job runs succesfully the child job triggers immediate after the parent job excutes 
+-->in this case if u are using trest clent component we are providing API in component 
+-->there will be some b/w the jobs 
+-->in this case we use T-sleep component which gives provides some time b/w two jobs 
+-->on opening the component it asks the time in seconds provide ur time gap in sec 
+=======================================================
+
+
+						 		T-CONTEXT_LOAD
+
+-->when u are creating a job make sure u are creating the job with context_load Because
+-->after completing the job u have to do unit test the job urself and u have to give u r job code to the testing team 
+-->when the testing member testing u r job there may be chances of loss of u r code or changes in u r code by the testing team 
+-->becuase testing member doesn,t know development process
+-->in that case u have to create the job with context load if the testing member want to test ur job he will provide the values in the context itself 
+-->and the file location and sever credentials are not same for development and testing team so that he need to change the credentilas of database and file locations 
+-->instead of changing the parameters through the job we created context there he will change the parameters 
+-->PROCESS
+-->right click on context create context -->give the name of the context-->create columns in the schema and corresopinding values in the values column and data type 
+-->after completing  creation of the context  --> drag the context onto the design space
+--> give the parameters in the places where we need to give the values by clicking on ctrl+space bar 
+-->and run the job the job will excute succesfully
+``````````````````````````````````````````````````````````
+THROUGH FILE
+if u want to load the context through file   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+ 

@@ -1,0 +1,11 @@
+key,value
+db_host,localhost
+db_port,1521
+user_name,system
+pwd,talend
+database,xe
+emp_file_location,C:/talend/practice files/employe.txt
+pipe_file_loation,C:/talend/practice files/emp_out.csv
+dept_no,10
+country_name,UK
+user_id,12345
