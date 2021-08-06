@@ -54,7 +54,7 @@ irrespective where the fike actually created git always consider from which bran
 and that file is commiteed to that branch 
 ```````````````````````````````````````
 
-mkdir used to create a folder in it 
+mkdir used to create a folder in it for 
 
 
 
